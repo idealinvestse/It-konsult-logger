@@ -9,6 +9,9 @@ const exportBtn = document.querySelector("#export-btn");
 const importBtn = document.querySelector("#import-btn");
 const importFile = document.querySelector("#import-file");
 const sortSelect = document.querySelector("#sort-select");
+const backupBtn = document.querySelector("#backup-btn");
+const restoreBtn = document.querySelector("#restore-btn");
+const restoreFile = document.querySelector("#restore-file");
 
 // Konstant för localStorage-nyckel
 const STORAGE_KEY = "consultant-logs";
@@ -425,6 +428,59 @@ function initFilter(entries) {
   });
 }
 
+// Exporterar poster till JSON-fil (backup)
+function exportToJSON(data) {
+  if (data.length === 0) {
+    alert("Inga poster att exportera som backup.");
+    return;
+  }
+
+  const jsonContent = JSON.stringify(data, null, 2);
+  const blob = new Blob([jsonContent], { type: "application/json;charset=utf-8;" });
+  const link = document.createElement("a");
+  const url = URL.createObjectURL(blob);
+  link.setAttribute("href", url);
+  link.setAttribute("download", "tidrapport-backup.json");
+  link.style.visibility = "hidden";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+// Importerar poster från JSON-fil (återställning)
+function importFromJSON(file) {
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    if (!confirm("Är du säker på att du vill återställa från en backup? All nuvarande data kommer att skrivas över.")) {
+      return;
+    }
+
+    try {
+      const jsonData = JSON.parse(e.target.result);
+      
+      if (!Array.isArray(jsonData)) {
+        throw new Error("Backup-filen är inte i korrekt format (måste vara en array).");
+      }
+
+      // Enkel validering för att säkerställa att objekten ser korrekta ut
+      const isValid = jsonData.every(item => 'id' in item && 'client' in item && 'date' in item);
+      if (!isValid) {
+        throw new Error("Datat i backup-filen verkar vara ogiltigt.");
+      }
+
+      entries = jsonData;
+      saveEntries(entries);
+      refresh();
+      alert(`Backup återställd med ${jsonData.length} poster.`);
+
+    } catch (error) {
+      console.error("Fel vid återställning från backup:", error);
+      alert(`Kunde inte återställa från backup: ${error.message}`);
+    }
+  };
+  reader.readAsText(file);
+}
+
 // Huvudfunktion som startar appen
 function bootstrap() {
   entries = loadEntries();
@@ -456,6 +512,22 @@ function bootstrap() {
     if (file) {
       importFromCSV(file);
       importFile.value = ""; // Återställ för att tillåta samma fil igen
+    }
+  });
+
+  backupBtn.addEventListener("click", () => {
+    exportToJSON(entries);
+  });
+
+  restoreBtn.addEventListener("click", () => {
+    restoreFile.click();
+  });
+
+  restoreFile.addEventListener("change", (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      importFromJSON(file);
+      restoreFile.value = ""; // Återställ
     }
   });
 }
