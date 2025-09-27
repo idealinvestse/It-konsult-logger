@@ -1,0 +1,266 @@
+:root {
+  --bg: #f5f7fb;
+  --card-bg: #ffffff;
+  --primary: #2563eb;
+  --primary-dark: #1e3a8a;
+  --secondary: #475569;
+  --border: #e2e8f0;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --danger: #dc2626;
+  --radius: 12px;
+  --shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+  font-size: 16px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: radial-gradient(circle at top left, #e0f2fe, transparent),
+    radial-gradient(circle at bottom right, #c7d2fe, transparent), var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-header {
+  text-align: center;
+  padding: 48px 24px 32px;
+}
+
+.app-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.app-header p {
+  color: var(--muted);
+  margin: 0 auto;
+  max-width: 520px;
+}
+
+.layout {
+  width: min(1100px, 92vw);
+  margin: 0 auto 48px;
+  display: grid;
+  gap: 24px;
+}
+
+.card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 28px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(12px);
+}
+
+.card h2 {
+  margin-top: 0;
+}
+
+.form-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-field--full {
+  grid-column: 1 / -1;
+}
+
+label {
+  font-weight: 600;
+  color: var(--secondary);
+}
+
+input,
+select,
+textarea {
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font: inherit;
+  background-color: #ffffff;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 2px solid rgba(37, 99, 235, 0.4);
+  border-color: transparent;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.summary {
+  background: rgba(37, 99, 235, 0.08);
+  border-radius: 10px;
+  padding: 14px 18px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--primary-dark);
+}
+
+.form-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: #ffffff;
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.22);
+}
+
+.btn-secondary {
+  background: #e2e8f0;
+  color: var(--secondary);
+}
+
+.btn-link {
+  background: transparent;
+  color: var(--danger);
+  padding: 0;
+  font-weight: 600;
+}
+
+.btn:focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.35);
+  outline-offset: 3px;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 640px;
+}
+
+thead {
+  background: rgba(37, 99, 235, 0.08);
+}
+
+td,
+th {
+  padding: 14px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+tbody tr:hover {
+  background: rgba(148, 163, 184, 0.12);
+}
+
+.actions {
+  text-align: right;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filters__label {
+  font-weight: 500;
+  color: var(--secondary);
+}
+
+.filters__select {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  font: inherit;
+}
+
+.app-footer {
+  margin-top: auto;
+  text-align: center;
+  padding: 24px;
+  color: var(--muted);
+}
+
+.highlight {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+@media (max-width: 700px) {
+  .app-header h1 {
+    font-size: 2rem;
+  }
+
+  table {
+    min-width: unset;
+  }
+
+  thead {
+    display: none;
+  }
+
+  tbody tr {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    padding: 18px 12px;
+  }
+
+  tbody tr td {
+    border: none;
+    padding: 0;
+  }
+
+  tbody tr td[data-label]::before {
+    content: attr(data-label) ": ";
+    font-weight: 600;
+    color: var(--secondary);
+  }
+
+  .actions {
+    grid-column: 1 / -1;
+    justify-self: end;
+  }
+}
