@@ -81,10 +81,11 @@
             <button type="reset" class="btn btn-secondary" id="reset-form">
               Rensa
             </button>
+            <button type="button" class="btn btn-secondary" id="export-btn">Exportera CSV</button>
+            <button type="button" class="btn btn-secondary" id="import-btn">Importera CSV</button>
+            <input type="file" id="import-file" accept=".csv" style="display: none;" />
           </div>
         </form>
-      </section>
-
       <section class="card" aria-labelledby="lista-title">
         <div class="card-header">
           <h2 id="lista-title">Registrerade poster</h2>
@@ -93,13 +94,21 @@
             <select id="customer-filter" class="filters__select">
               <option value="">Alla</option>
             </select>
+            <label class="filters__label" for="sort-select">Sortera:</label>
+            <select id="sort-select" class="filters__select">
+              <option value="date-desc">Datum (nyaste först)</option>
+              <option value="date-asc">Datum (äldsta först)</option>
+              <option value="hours-desc">Timmar (flest först)</option>
+              <option value="hours-asc">Timmar (minst först)</option>
+              <option value="client-asc">Kund (A-Ö)</option>
+              <option value="client-desc">Kund (Ö-A)</option>
+            </select>
           </div>
         </div>
         <div class="table-wrapper">
           <table aria-describedby="lista-title">
             <thead>
               <tr>
-                <th>Kund</th>
                 <th>Datum</th>
                 <th>Typ</th>
                 <th>Tid</th>
@@ -114,6 +123,7 @@
       </section>
     </main>
 
+    <!-- Mall för tabellrad som används för att rendera loggade poster -->
     <template id="log-row-template">
       <tr>
         <td data-label="Kund"></td>
@@ -123,7 +133,10 @@
         <td data-label="Totalt"></td>
         <td data-label="Anteckningar"></td>
         <td class="actions">
-          <button type="button" class="btn btn-link" data-action="remove">
+          <button type="button" class="btn btn-link" data-action="edit" title="Redigera">
+            Redigera
+          </button>
+          <button type="button" class="btn btn-link" data-action="remove" title="Ta bort">
             Ta bort
           </button>
         </td>
@@ -131,6 +144,7 @@
     </template>
 
     <footer class="app-footer">
+      <!-- Information om datalagring -->
       <p>
         Data sparas i din webbläsare via <span class="highlight">localStorage</span>.
       </p>
